@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  html, body { margin: 0; width: 652px; height: 488px; overflow: hidden; }
+  body {
+    font-family: "Malgun Gothic", sans-serif;
+    background: linear-gradient(135deg, #0f1f4d 0%, #1d3a8a 100%);
+    color: #fff; position: relative;
+  }
+  .tag { position: absolute; top: 40px; left: 44px; font-size: 15px; letter-spacing: 1px; color: #9fb3ec; font-weight: 700; }
+  h1 { position: absolute; top: 74px; left: 44px; margin: 0; font-size: 40px; line-height: 1.3; font-weight: 800; }
+  .flow { position: absolute; top: 210px; left: 44px; right: 44px; display: flex; align-items: center; gap: 14px; }
+  .box { flex: 1; border-radius: 14px; padding: 16px 18px; }
+  .before { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); }
+  .after { background: #fff; color: #0f1f4d; }
+  .box b { display: block; font-size: 13px; opacity: .7; margin-bottom: 6px; }
+  .box span { display: block; font-size: 17px; font-weight: 700; line-height: 1.5; }
+  .arrow { font-size: 30px; color: #ffd166; font-weight: 800; }
+  .stats { position: absolute; bottom: 40px; left: 44px; right: 44px; display: flex; gap: 12px; }
+  .stat { flex: 1; background: rgba(255,255,255,.08); border-radius: 12px; padding: 12px 14px; }
+  .stat strong { display: block; font-size: 26px; color: #ffd166; }
+  .stat small { font-size: 13px; color: #c9d4f5; }
+</style>
+</head>
+<body>
+  <div class="tag">25년차 자바 개발자 · 레거시 전환 사례</div>
+  <h1>10년 된 사내 게시판,<br>스프링부트 3로 살려냈습니다</h1>
+  <div class="flow">
+    <div class="box before"><b>전</b><span>Java 7 · Spring 4<br>JSP · 문자열 SQL</span></div>
+    <div class="arrow">→</div>
+    <div class="box after"><b>후</b><span>Java 21 · Spring Boot 3<br>Thymeleaf · MyBatis</span></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>8건</strong><small>장애 원인 해결</small></div>
+    <div class="stat"><strong>11 → 1</strong><small>목록 조회 쿼리 수</small></div>
+    <div class="stat"><strong>9개</strong><small>회귀 테스트 통과</small></div>
+  </div>
+</body>
+</html>

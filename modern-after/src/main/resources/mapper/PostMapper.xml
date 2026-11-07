@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.board.mapper.PostMapper">
+
+    <!-- [해결1] 검색어는 #{} 바인딩 변수로만 전달 → SQL 인젝션 차단 -->
+    <sql id="searchCondition">
+        WHERE B.DEL_YN = 'N'
+        <if test="keyword != null and keyword != ''">
+            AND B.TITLE LIKE '%' || #{keyword} || '%'
+        </if>
+    </sql>
+
+    <!-- [해결2] 필요한 10건만 DB에서 잘라 옴 (Oracle 12c+ 문법, H2 Oracle 모드 호환)
+         [해결3] 댓글 수는 한 번의 집계 조인으로 → 쿼리 11번에서 1번으로 -->
+    <select id="findPage" resultType="com.company.board.domain.PostSummary">
+        SELECT B.ID, B.TITLE, B.WRITER, B.REG_DATE,
+               COALESCE(C.CNT, 0) AS COMMENT_COUNT
+        FROM BOARD B
+        LEFT JOIN (
+            SELECT BOARD_ID, COUNT(*) AS CNT
+            FROM BOARD_COMMENT
+            GROUP BY BOARD_ID
+        ) C ON C.BOARD_ID = B.ID
+        <include refid="searchCondition"/>
+        ORDER BY B.ID DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM BOARD B
+        <include refid="searchCondition"/>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO BOARD (ID, TITLE, WRITER, CONTENT, DEL_YN, REG_DATE)
+        VALUES (BOARD_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, 'N', SYSTIMESTAMP)
+    </insert>
+</mapper>

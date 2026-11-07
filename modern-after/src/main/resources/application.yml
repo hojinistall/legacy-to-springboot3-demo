@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: board
+  datasource:
+    # Oracle 호환 모드로 띄워 운영 SQL을 그대로 검증
+    url: jdbc:h2:mem:board;MODE=Oracle;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8090
+
+board:
+  page-size: 10

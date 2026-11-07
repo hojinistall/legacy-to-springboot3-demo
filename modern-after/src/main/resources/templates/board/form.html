@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>글쓰기 - 사내 게시판</title>
+    <style th:replace="~{board/layout-style :: style}"></style>
+</head>
+<body>
+<div class="wrap">
+    <header><h1>글쓰기</h1></header>
+
+    <form class="card" th:action="@{/board}" th:object="${form}" method="post">
+        <label for="title">제목</label>
+        <input id="title" type="text" th:field="*{title}">
+        <p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+
+        <label for="writer">작성자</label>
+        <input id="writer" type="text" th:field="*{writer}">
+        <p class="error" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}"></p>
+
+        <label for="content">내용</label>
+        <textarea id="content" rows="8" th:field="*{content}"></textarea>
+        <p class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+
+        <p><button type="submit">등록</button> <a th:href="@{/board}">목록</a></p>
+    </form>
+</div>
+</body>
+</html>

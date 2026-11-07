@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>요청 오류 - 사내 게시판</title>
+    <style th:replace="~{board/layout-style :: style}"></style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>요청을 처리할 수 없어요</h1>
+        <p th:text="${message}"></p>
+        <a class="btn" th:href="@{/board}">목록으로</a>
+    </div>
+</div>
+</body>
+</html>

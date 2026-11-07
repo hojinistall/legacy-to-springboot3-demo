@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>사내 게시판</title>
+    <style th:replace="~{board/layout-style :: style}"></style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <h1>사내 게시판 <span class="badge">Spring Boot 3 · Java 21</span></h1>
+        <a class="btn" th:href="@{/board/new}">글쓰기</a>
+    </header>
+
+    <div class="card">
+        <form class="search" th:action="@{/board}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="제목으로 검색">
+            <button type="submit">검색</button>
+        </form>
+
+        <!-- [해결7] th:text 는 자동으로 HTML 이스케이프 → XSS 차단 -->
+        <p class="meta" th:if="${keyword != null and !#strings.isEmpty(keyword)}">
+            검색어 '<span th:text="${keyword}"></span>' 결과 <span th:text="${result.totalCount}"></span>건
+        </p>
+        <p class="meta" th:unless="${keyword != null and !#strings.isEmpty(keyword)}">
+            전체 <span th:text="${#numbers.formatInteger(result.totalCount, 1, 'COMMA')}"></span>건
+        </p>
+
+        <!-- [해결8] 화면에는 표시만. 자바 코드(스크립틀릿)는 컨트롤러·서비스로 이동 -->
+        <table>
+            <thead>
+            <tr><th>번호</th><th>제목</th><th>작성자</th><th>등록일</th><th>댓글</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${result.posts}">
+                <td class="num" th:text="${post.id}"></td>
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.writer}"></td>
+                <td th:text="${#temporals.format(post.regDate, 'yyyy-MM-dd')}"></td>
+                <td class="count" th:text="${post.commentCount}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(result.posts)}">
+                <td colspan="5">검색 결과가 없어요.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="paging">
+            <a th:if="${result.hasPrevious()}" th:href="@{/board(keyword=${keyword}, page=${result.page - 1})}">이전</a>
+            <span th:text="|${result.page} / ${result.totalPages}|"></span>
+            <a th:if="${result.hasNext()}" th:href="@{/board(keyword=${keyword}, page=${result.page + 1})}">다음</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

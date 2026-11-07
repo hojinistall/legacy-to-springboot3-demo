@@ -1,0 +1,9 @@
+# 운영 설정. 계정은 소스에 넣지 않고 환경 변수로 주입
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: never

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  html, body { margin: 0; width: 652px; }
+  body { font-family: "Malgun Gothic", sans-serif; background: #f4f6fa; color: #1f2933; }
+  section { padding: 34px 32px; }
+  .hero { background: #0f1f4d; color: #fff; }
+  .hero small { color: #9fb3ec; font-weight: 700; font-size: 13px; }
+  .hero h1 { font-size: 28px; margin: 8px 0 10px; line-height: 1.35; }
+  .hero p { margin: 0; color: #c9d4f5; font-size: 15px; line-height: 1.6; }
+  h2 { font-size: 20px; margin: 0 0 16px; }
+  h2 em { font-style: normal; color: #1d3a8a; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; font-size: 14px; }
+  th, td { padding: 11px 12px; border-bottom: 1px solid #e4e7eb; text-align: left; vertical-align: top; }
+  thead th { background: #e8edf8; color: #1d3a8a; }
+  td.bad { color: #b42318; }
+  td.good { color: #067647; font-weight: 600; }
+  .card { background: #fff; border-radius: 12px; padding: 16px 18px; margin-bottom: 10px; display: flex; gap: 14px; }
+  .num { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #1d3a8a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .card h3 { margin: 0 0 4px; font-size: 15px; }
+  .card p { margin: 0; font-size: 13px; line-height: 1.6; color: #52606d; }
+  .card p b { color: #067647; }
+  .tests { background: #0b1220; color: #d1fadf; border-radius: 12px; padding: 16px 18px; font-family: Consolas, monospace; font-size: 12.5px; line-height: 1.8; }
+  .tests .ok { color: #32d583; }
+  .tests .sum { color: #fff; margin-top: 6px; font-weight: 700; }
+  .foot { text-align: center; font-size: 13px; color: #616e7c; padding-bottom: 34px; }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <small>레거시 전환 사례 · 데모 프로젝트</small>
+    <h1>담당자 퇴사 후 아무도 못 건드리던<br>사내 게시판을 다시 살렸습니다</h1>
+    <p>화면과 SQL 자산은 살리고, 장애를 일으키던 원인 8가지를 모두 고친 뒤<br>테스트로 재발을 막았습니다.</p>
+  </section>
+
+  <section>
+    <h2>무엇이 <em>바뀌었나</em></h2>
+    <table>
+      <thead><tr><th>구분</th><th>전</th><th>후</th></tr></thead>
+      <tbody>
+        <tr><td>자바</td><td class="bad">1.7</td><td class="good">21</td></tr>
+        <tr><td>프레임워크</td><td class="bad">Spring 4 + XML 설정</td><td class="good">Spring Boot 3.5</td></tr>
+        <tr><td>화면</td><td class="bad">JSP + 스크립틀릿</td><td class="good">Thymeleaf</td></tr>
+        <tr><td>DB 접근</td><td class="bad">문자열 이어 붙인 JDBC</td><td class="good">MyBatis 바인딩</td></tr>
+        <tr><td>배포</td><td class="bad">WAR + 외부 Tomcat</td><td class="good">JAR 파일 하나</td></tr>
+        <tr><td>DB 계정</td><td class="bad">소스에 그대로 노출</td><td class="good">환경 변수로 분리</td></tr>
+        <tr><td>테스트</td><td class="bad">없음</td><td class="good">회귀 테스트 9개</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>고친 <em>장애 원인 8가지</em></h2>
+    <div class="card"><div class="num">1</div><div><h3>검색창 한 줄로 비공개 글 노출 (SQL 인젝션)</h3><p>검색어를 SQL에 이어 붙이던 코드를 → <b>바인딩 변수로 교체</b></p></div></div>
+    <div class="card"><div class="num">2</div><div><h3>목록 화면 10초 이상, 메모리 부족</h3><p>전체 글을 읽고 자바에서 자르던 방식을 → <b>DB에서 10건만 조회 + 인덱스</b></p></div></div>
+    <div class="card"><div class="num">3</div><div><h3>목록 한 번에 쿼리 11번 (N+1)</h3><p>글마다 댓글 수를 따로 세던 것을 → <b>집계 조인 1번으로</b></p></div></div>
+    <div class="card"><div class="num">4</div><div><h3>오류가 쌓이면 사이트 전체 멈춤</h3><p>예외 시 커넥션이 반환되지 않던 것을 → <b>스프링 트랜잭션이 관리</b></p></div></div>
+    <div class="card"><div class="num">5</div><div><h3>주소 한 글자로 500 에러 화면</h3><p>잘못된 페이지 번호를 → <b>400 안내 화면 + 범위 자동 보정</b></p></div></div>
+    <div class="card"><div class="num">6</div><div><h3>빈 제목·작은따옴표 제목에서 오류</h3><p>검증 없던 입력을 → <b>입력값 검증 + 등록은 POST만 허용</b></p></div></div>
+    <div class="card"><div class="num">7</div><div><h3>검색어에 넣은 스크립트가 실행됨 (XSS)</h3><p>그대로 출력하던 화면을 → <b>자동 이스케이프 템플릿으로</b></p></div></div>
+    <div class="card"><div class="num">8</div><div><h3>화면 하나 고치면 다른 곳이 깨짐</h3><p>JSP에 섞여 있던 자바 코드를 → <b>서비스 계층으로 분리</b></p></div></div>
+  </section>
+
+  <section style="padding-top:0">
+    <h2>테스트로 <em>재발 방지</em></h2>
+    <div class="tests">
+      <div><span class="ok">✔</span> [문제1] SQL 인젝션 검색어로 비공개 글이 노출되지 않는다</div>
+      <div><span class="ok">✔</span> [문제2] 목록은 DB에서 10건만 가져오고 페이지 계산이 맞다</div>
+      <div><span class="ok">✔</span> [문제3] 댓글 수가 한 번의 조회로 정확히 계산된다</div>
+      <div><span class="ok">✔</span> [문제5] 숫자가 아닌 page 값은 400 안내 화면</div>
+      <div><span class="ok">✔</span> [문제5] 범위를 벗어난 page 값은 자동 보정</div>
+      <div><span class="ok">✔</span> [문제6] 빈 제목은 저장되지 않고 안내 문구가 나온다</div>
+      <div><span class="ok">✔</span> [문제1·6] 작은따옴표가 든 제목도 정상 저장된다</div>
+      <div><span class="ok">✔</span> [문제6] GET 요청으로는 글이 등록되지 않는다</div>
+      <div><span class="ok">✔</span> [문제7] 검색어에 넣은 스크립트는 이스케이프된다</div>
+      <div class="sum">9 tests completed, 0 failed — BUILD SUCCESSFUL</div>
+    </div>
+  </section>
+
+  <div class="foot">실제 고객사 코드가 아닌, 현장에서 반복해 본 문제를 재현한 데모 프로젝트입니다.</div>
+</body>
+</html>
